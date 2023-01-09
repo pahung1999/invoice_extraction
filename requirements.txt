@@ -1,0 +1,22 @@
+python-doctr[torch]
+git+https://github.com/ndgnuh/vietocr
+thefuzz[speedup]
+albumentations
+-f https://data.pyg.org/whl/torch-1.11.0+cu113.html
+-f https://data.pyg.org/whl/torch-1.11.0+cu113.html
+--extra-index-url https://download.pytorch.org/whl/cu113
+torch
+torch-scatter 
+torch-sparse
+torch-geometric
+pandas
+numpy
+networkx
+tensorboard
+transformers
+thefuzz[speedup]
+dill
+pyyaml
+lenses
+bpemb
+scikit-learn
