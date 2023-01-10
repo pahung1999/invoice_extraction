@@ -3,16 +3,17 @@ import torch
 from doctr.io import DocumentFile
 from doctr.models import detection_predictor
 from PIL import Image
-# from vietocr.tool.predictor import Predictor
-# from vietocr.tool.config import Cfg
+from vietocr.tool.predictor import Predictor
+from vietocr.tool.config import Cfg
 from functools import lru_cache
 import matplotlib.pyplot as plt
 import cv2
 # Sắp xếp box theo thứ tự trái -> phải, trên -> dưới
 # g=arrange_bbox(df["img_bboxes"][i])
 # rows=arrange_row(g=g)
-from vietocr.tool.config import get_config, list_configs
-from vietocr.tool.predictor import Predictor
+
+# from vietocr.tool.config import get_config, list_configs
+# from vietocr.tool.predictor import Predictor
 
 
 #Show img
@@ -160,7 +161,7 @@ def detection_doctr(image, model):
 
 # Recognition
 # input box: x1,y1,x2,y2
-@lru_cache
+# @lru_cache
 # def get_model_vietocr():
 #     config = Cfg.load_config_from_name('vgg_seq2seq')
 #     # config['weights'] = 'https://drive.google.com/uc?id=13327Y1tz1ohsm5YZMyXVMPIOjoOA0OaA'
@@ -174,12 +175,45 @@ def detection_doctr(image, model):
 #     config['predictor']['beamsearch'] = False
 #     model = Predictor(config)
 #     return model
-def get_model_vietocr(config_name="./checkpoint/vietocr/inception_v3_s2s.yml"):
+# def get_model_vietocr(config_name="./checkpoint/vietocr/inception_v3_s2s.yml"):
     
-    config = get_config(config_name)
-    config['device']= 'cuda' if torch.cuda.is_available() else 'cpu'
+#     config = get_config(config_name)
+#     config['device']= 'cuda' if torch.cuda.is_available() else 'cpu'
+#     model = Predictor(config)
+#     return model
+
+# def recognition_vietocr(image, bboxes, model):
+#     raw_text = []
+#     # image = np.frombuffer(image, np.uint8)
+#     # image = cv2.imdecode(image, cv2.IMREAD_COLOR)
+#     for box in bboxes:
+#         # print("image.shape: ",image.shape)
+#         # print("box: ",box)
+#         img_box = image[box[1]:box[3], box[0]:box[2]]
+#         # print("img_box.shape: ",img_box.shape)
+#         img_box = Image.fromarray(img_box)
+#         text = model(img_box)[0]
+#         if text == []:
+#             raw_text.append("?")
+#             continue
+#         raw_text.append(str(text))
+#     return raw_text
+
+def get_model_vietocr():
+    config = Cfg.load_config_from_file('./checkpoint/vietocr/vgg-seq2seq.yml')
+    # config['weights'] = 'https://drive.google.com/uc?id=13327Y1tz1ohsm5YZMyXVMPIOjoOA0OaA'
+    config['weights'] = './checkpoint/vietocr/vgg_seq2seq.pth'
+    config['cnn']['pretrained'] = False
+    if torch.cuda.is_available():
+        config['device'] = 'cuda:0'
+    else:
+        config['device'] = 'cpu'
+
+    config['predictor']['beamsearch'] = False
     model = Predictor(config)
     return model
+    
+
 
 def recognition_vietocr(image, bboxes, model):
     raw_text = []
@@ -191,12 +225,13 @@ def recognition_vietocr(image, bboxes, model):
         img_box = image[box[1]:box[3], box[0]:box[2]]
         # print("img_box.shape: ",img_box.shape)
         img_box = Image.fromarray(img_box)
-        text = model(img_box)[0]
+        text = model.predict(img_box)
         if text == []:
             raw_text.append("?")
             continue
         raw_text.append(str(text))
     return raw_text
+
 
 
 

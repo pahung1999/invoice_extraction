@@ -168,6 +168,13 @@ data = dict(
         "./data/vietnamese_invoice_GTGT_merged/test_invoice_vn_labelv3.jsonl",
         n_labels=31,
     ),
+    vn_invoice_labelv3_full=DataConfig(
+        train_data=
+        "./data/vietnamese_invoice_GTGT_merged/train_invoice_vn_labelv3_full.jsonl",
+        test_data=
+        "./data/vietnamese_invoice_GTGT_merged/test_invoice_vn_labelv3.jsonl",
+        n_labels=31,
+    ),
     vn_invoice_augment=DataConfig(
         train_data=
         "./data/vietnamese_invoice_GTGT_merged/train_augment_invoice.jsonl",
@@ -183,10 +190,8 @@ data = dict(
         n_labels=31,
     ),
     vn_invoice_2labels=DataConfig(
-        train_data=
-        "./data/vietnamese_invoice_GTGT_2labels/train_v1.jsonl",
-        test_data=
-        "./data/vietnamese_invoice_GTGT_2labels/test_v1.jsonl",
+        train_data="./data/vietnamese_invoice_GTGT_2labels/train_v1.jsonl",
+        test_data="./data/vietnamese_invoice_GTGT_2labels/test_v1.jsonl",
         n_labels=2,
     ),
     vn_id=DataConfig(
@@ -205,17 +210,34 @@ data = dict(
         test_data="./data/sample_data/spade-data/eng_card/test_eng_card.jsonl",
         n_labels=7,
     ),
-)
+    CCCD_merge_v2=DataConfig(
+        train_data="./data/CCCD/CCCD/merge_v4/CCCD_cut_merge_20-60.jsonl",
+        test_data="./data/CCCD/CCCD/merge_v4/CCCD_cut_merge_1_20.jsonl",
+        n_labels=8,
+    ),
+    CCCD_non_chip=DataConfig(
+        train_data=
+        "/home/phung/AnhHung/label_tool/invoice-data.vi.split/CCCD_non_chip/ver1/CCCD_non_chip_1-15.jsonl",
+        test_data=
+        "/home/phung/AnhHung/label_tool/invoice-data.vi.split/CCCD_non_chip/ver1/CCCD_non_chip_15-20.jsonl",
+        n_labels=9,
+    ),
+    template_37=DataConfig(
+        train_data="./data/template_overfit/Template_37_1-10.jsonl",
+        test_data="./data/template_overfit/Template_37_1-10.jsonl",
+        n_labels=31))
 
 # dataset = "vn_invoice_merge"
 # dataset = "vn_invoice_augment"
-dataset = "vn_invoice_labelv3"
+# dataset="vn_invoice"
+dataset="vn_invoice_labelv3_full"
+# dataset = "vn_invoice_labelv3"
 # dataset = "vn_invoice_full_origin"
 # dataset = "sample"
 dataset = data[dataset]
 num_warmup_steps = 15
 max_epoch = 500 + num_warmup_steps
-max_epoch = 3000
+max_epoch = 1200
 train_data = spade.GSpadeDataset(None, dataset.train_data)
 test_data = spade.GSpadeDataset(None, dataset.test_data)
 
