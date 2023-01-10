@@ -20,3 +20,4 @@ pyyaml
 lenses
 bpemb
 scikit-learn
+streamlit
